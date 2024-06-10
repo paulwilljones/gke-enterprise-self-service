@@ -1,6 +1,21 @@
 name: 'GKE Config Controller'
 on:
   workflow_dispatch:
+    inputs:
+      name:
+        type: string
+        description: Name of the GKE Config Controller instance
+      location:
+        type: string
+        description: Location of GKE Config Controller instance
+      instance_type:
+        type: string
+        description: Type of GKE Config Controller instance (Autopilot|Standard)
+      port_context:
+        required: false
+        description:
+          Who triggered the action and general context (blueprint, run id, etc...)
+        type: string
 jobs:
   Config-Controller:
     runs-on: ubuntu-latest
@@ -12,8 +27,12 @@ jobs:
       - uses: 'google-github-actions/auth@v2'
         with:
           project_id: 'jetstack-paul'
-          workload_identity_provider: 'projects/993897508389/locations/global/workloadIdentityPools/github/providers/my-repo'
+          workload_identity_provider: 'projects/993897508389/locations/global/workloadIdentityPools/github/providers/paulwilljones'
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
+      - run: |
+          echo "${{ inputs.name }}"
+          echo "${{ inputs.location }}"
+          echo "${{ inputs.instance_type }}"
