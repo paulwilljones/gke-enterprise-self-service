@@ -9,7 +9,8 @@ spec:
   projectRef:
     external: jetstack-paul
   location: global
-  membershipRef: test
+  membershipRef:
+    name: test
   featureRef:
     name: gkehubfeature-acm
   configmanagement:
