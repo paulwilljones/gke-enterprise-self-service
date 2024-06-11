@@ -19,8 +19,8 @@ resource "port_action" "create_microservice" {
           title       = "Location"
           required    = true
           description = "Location of Config Controller"
-          default     = "europe-west2"
-          enum        = ["europe-west2", "us-central1"]
+          default     = "europe-west1"
+          enum        = ["europe-west1", "us-central1"]
         }
         instance_type = {
           title       = "Instance Type"

@@ -37,3 +37,8 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v2'
       - name: 'Create Config Controller'
         run: 'gcloud anthos config controller create ${{ inputs.name}} --location=${{ inputs.location }} --full-management'
+      - name: 'Get Config Controller credentials'
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: '${{ inputs.name }}'
+          location: '${{ inputs.location }}'

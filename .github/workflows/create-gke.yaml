@@ -1,0 +1,36 @@
+name: 'Add ContainerCluster manifest'
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        type: string
+        description: Name of the GKE cluster
+      location:
+        type: string
+        description: Location of GKE cluster
+      instance_type:
+        type: string
+        description: Type of GKE cluster (Autopilot|Standard)
+      port_context:
+        required: false
+        description:
+          Who triggered the action and general context (blueprint, run id, etc...)
+        type: string
+jobs:
+  Add-ContainerCluster:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v4
+        - run: |
+            cp gke-autopilot/containercluster.yaml user-clusters/${{ inputs.name }}.yaml
+        - uses: mikefarah/yq@master
+          with:
+            cmd: yq -i '.metadata.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}.yaml' && yq -i '.spec.location = "${{ inputs.location }}"' 'user-clusters/${{ inputs.name }}.yaml'
+        - name: Create Pull Request
+          uses: peter-evans/create-pull-request@v6
+          with:
+            commit-message: add ${{ inputs.name }} GKE cluster in ${{ inputs.location }}
+            title: Add ${{ inputs.name }} GKE cluster
+            branch: add-gke-${{ inputs.name }}
+            delete-branch: true
+            add-paths: user-clusters/${{ inputs.name }}.yaml
