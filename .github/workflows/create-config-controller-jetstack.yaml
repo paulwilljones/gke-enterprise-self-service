@@ -27,7 +27,7 @@ jobs:
       - uses: 'google-github-actions/auth@v2'
         with:
           project_id: 'jetstack-paul'
-          workload_identity_provider: 'projects/993897508389/locations/global/workloadIdentityPools/github/providers/paulwilljones'
+          workload_identity_provider: 'projects/993897508389/locations/global/workloadIdentityPools/github/providers/my-repo'
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
       - name: 'Use gcloud CLI'

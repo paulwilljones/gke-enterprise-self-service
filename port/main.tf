@@ -33,9 +33,9 @@ resource "port_action" "create_microservice" {
     }
   }
   github_method = {
-    org      = "jetstack"
+    org      = "paulwilljones"
     repo     = "gke-enterprise-self-service"
-    workflow = "deploy.yaml"
+    workflow = "create-config-controller-paulwilljones.yaml"
     workflow_inputs = jsonencode({
       "{{ spreadValue() }}" : "{{ .inputs }}",
       "port_context" : {
