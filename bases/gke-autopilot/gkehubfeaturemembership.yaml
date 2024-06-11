@@ -17,11 +17,12 @@ spec:
     configSync:
       sourceFormat: unstructured
       git:
-        syncRepo: "https://github.com/GoogleCloudPlatform/gke-policy-library/tree/main"
+        syncRepo: "https://github.com/GoogleCloudPlatform/gke-policy-library"
         syncBranch: "main"
         policyDir: "bundles/cis-k8s-v1.5.1"
         syncWaitSecs: "20"
         syncRev: "HEAD"
+        secretType: none
     policyController:
       enabled: true
       exemptableNamespaces:
