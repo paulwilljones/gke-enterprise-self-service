@@ -11,6 +11,15 @@ on:
       instance_type:
         type: string
         description: Type of GKE Config Controller instance (Autopilot|Standard)
+      root_sync_repo:
+        type: string
+        description: Repository to sync using Config Sync
+      root_sync_ref:
+        type: string
+        description: Git ref to sync using Config Sync
+      root_sync_dir:
+        type: string
+        description: Directory to sync using Config Sync
       port_context:
         required: false
         description:
@@ -28,6 +37,9 @@ jobs:
           echo "${{ inputs.name }}"
           echo "${{ inputs.location }}"
           echo "${{ inputs.instance_type }}"
+          echo "${{ inputs.root_sync_repo }}"
+          echo "${{ inputs.root_sync_ref }}"
+          echo "${{ inputs.root_sync_dir }}"
       - uses: 'actions/checkout@v4'
       - uses: 'google-github-actions/auth@v2'
         with:
@@ -36,9 +48,33 @@ jobs:
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
       - name: 'Create Config Controller'
-        run: 'gcloud anthos config controller create ${{ inputs.name}} --location=${{ inputs.location }} --full-management'
+        if: ${{ inputs.name != 'port-config-controller' }}
+        run: 'gcloud anthos config controller create ${{ inputs.name }} --location=${{ inputs.location }} --full-management'
       - name: 'Get Config Controller credentials'
         uses: 'google-github-actions/get-gke-credentials@v2'
         with:
-          cluster_name: '${{ inputs.name }}'
+          cluster_name: 'krmapihost-${{ inputs.name }}'
           location: '${{ inputs.location }}'
+      - name: Configure Config Connector
+        run: |
+          SA_EMAIL="$(kubectl get ConfigConnectorContext -n config-control -o jsonpath='{.items[0].spec.googleServiceAccount}' 2> /dev/null)"
+          gcloud projects add-iam-policy-binding jetstack-paul --member "serviceAccount:${SA_EMAIL}" --role roles/owner --condition=None
+          gcloud projects add-iam-policy-binding jetstack-paul --member="serviceAccount:jetstack-paul.svc.id.goog[gatekeeper-system/gatekeeper-admin]" --role=roles/monitoring.metricWriter --condition=None
+      - name: Configure Config Sync
+        run: |
+          kubectl wait --for condition=established --timeout=10s crd/rootsyncs.configsync.gke.io
+          kubectl apply -f bases/root-syncs/gkehubfeature.yaml
+          kubectl apply -f - <<EOF
+            apiVersion: configsync.gke.io/v1beta1
+            kind: RootSync
+            metadata:
+              name: root-sync
+              namespace: config-management-system
+            spec:
+              sourceFormat: unstructured
+              git:
+                repo: ${{ inputs.root_sync_repo }}
+                branch: ${{ inputs.root_sync_ref }}
+                dir: ${{ inputs.root_sync_dir }}
+                auth: none
+          EOF

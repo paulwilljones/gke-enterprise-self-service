@@ -1,0 +1,24 @@
+apiVersion: gkehub.cnrm.cloud.google.com/v1beta1
+kind: GKEHubFeature
+metadata:
+  name: gkehubfeature-acm
+  namespace: config-control
+spec:
+  projectRef:
+    external: jetstack-paul
+  location: global
+  # The resourceID must be "configmanagement" if you want to use Anthos config
+  # management feature.
+  resourceID: configmanagement
+---
+apiVersion: gkehub.cnrm.cloud.google.com/v1beta1
+kind: GKEHubFeature
+metadata:
+  name: gkehubfeature-asm
+  namespace: config-control
+spec:
+  projectRef:
+    external: jetstack-paul
+  location: global
+  # The resourceID must be "servicemesh" if you want to use Anthos Service Mesh feature.
+  resourceID: servicemesh
