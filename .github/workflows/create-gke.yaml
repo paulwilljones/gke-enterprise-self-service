@@ -23,13 +23,19 @@ jobs:
         - uses: actions/checkout@v4
         - run: |
             mkdir user-clusters/${{ inputs.name }}
-            cp bases/gke-autopilot user-clusters/${{ inputs.name }}
+            cp bases/gke-autopilot/* user-clusters/${{ inputs.name }}/
         - uses: mikefarah/yq@master
           with:
             cmd: yq -i '.metadata.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/containercluster.yaml'
         - uses: mikefarah/yq@master
           with:
             cmd: yq -i '.spec.location = "${{ inputs.location }}"' 'user-clusters/${{ inputs.name }}/containercluster.yaml'
+        - uses: mikefarah/yq@master
+          with:
+            cmd: yq -i '.spec.networkRef.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/containercluster.yaml'
+        - uses: mikefarah/yq@master
+          with:
+            cmd: yq -i '.spec.subnetworkRef.external = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/containercluster.yaml'
         - uses: mikefarah/yq@master
           with:
             cmd: yq -i '.metadata.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/computenetwork.yaml'
