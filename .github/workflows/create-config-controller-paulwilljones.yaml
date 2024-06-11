@@ -18,11 +18,16 @@ on:
         type: string
 jobs:
   Config-Controller:
+    if: inputs.instance_type == 'Autopilot'
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
       id-token: 'write'
     steps:
+      - run: |
+          echo "${{ inputs.name }}"
+          echo "${{ inputs.location }}"
+          echo "${{ inputs.instance_type }}"
       - uses: 'actions/checkout@v4'
       - uses: 'google-github-actions/auth@v2'
         with:
@@ -30,9 +35,5 @@ jobs:
           workload_identity_provider: 'projects/993897508389/locations/global/workloadIdentityPools/github/providers/paulwilljones'
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
-      - name: 'Use gcloud CLI'
-        run: 'gcloud info'
-      - run: |
-          echo "${{ inputs.name }}"
-          echo "${{ inputs.location }}"
-          echo "${{ inputs.instance_type }}"
+      - name: 'Create Config Controller'
+        run: 'gcloud anthos config controller create ${{ inputs.name}} --location=${{ inputs.location }} --full-management'
