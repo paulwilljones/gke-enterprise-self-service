@@ -67,7 +67,7 @@ jobs:
 
         - run: |
             mkdir user-clusters/${{ inputs.name }}
-            helm template ${{ inputs.name }} charts/gke-autopilot --set tenantName=${{ inputs.name }} --set region=${{ inputs.location }} > user-clusters/${{ inputs.name }}
+            helm template ${{ inputs.name }} charts/gke-autopilot --set tenantName=${{ inputs.name }} --set region=${{ inputs.location }} > user-clusters/${{ inputs.name }}/gke.yaml
 
         - name: Create Pull Request
           uses: peter-evans/create-pull-request@v6
