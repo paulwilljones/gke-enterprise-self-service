@@ -1,0 +1,15 @@
+apiVersion: container.cnrm.cloud.google.com/v1beta1
+kind: ContainerCluster
+metadata:
+  name: {{ .Values.tenantName }}
+  namespace: config-control
+spec:
+  description: An autopilot cluster.
+  enableAutopilot: true
+  location: {{ .Values.region }}
+  releaseChannel:
+    channel: REGULAR
+  networkRef:
+    name: {{ .Values.tenantName }}
+  subnetworkRef:
+    external: {{ .Values.tenantName }}

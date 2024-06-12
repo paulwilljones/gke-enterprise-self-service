@@ -1,0 +1,8 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeNetwork
+metadata:
+  name: {{ .Values.tenantName }}
+  namespace: config-control
+spec:
+  routingMode: REGIONAL
+  autoCreateSubnetworks: true

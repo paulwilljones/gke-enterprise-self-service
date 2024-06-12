@@ -1,0 +1,6 @@
+tenantName: ""
+region: ""
+syncRepo: "https://github.com/GoogleCloudPlatform/gke-policy-library"
+syncBranch: "main"
+policyDir: "bundles/cis-k8s-v1.5.1"
+secretType: "none"

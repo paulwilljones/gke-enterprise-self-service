@@ -21,46 +21,55 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@v4
+        # - run: |
+        #     mkdir user-clusters/${{ inputs.name }}
+        #     cp bases/gke-autopilot/* user-clusters/${{ inputs.name }}/
+        # - uses: mikefarah/yq@master
+        #   with:
+        #     cmd: yq -i '.metadata.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/containercluster.yaml'
+        # - uses: mikefarah/yq@master
+        #   with:
+        #     cmd: yq -i '.spec.location = "${{ inputs.location }}"' 'user-clusters/${{ inputs.name }}/containercluster.yaml'
+        # - uses: mikefarah/yq@master
+        #   with:
+        #     cmd: yq -i '.spec.networkRef.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/containercluster.yaml'
+        # - uses: mikefarah/yq@master
+        #   with:
+        #     cmd: yq -i '.spec.subnetworkRef.external = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/containercluster.yaml'
+        # - uses: mikefarah/yq@master
+        #   with:
+        #     cmd: yq -i '.metadata.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/computenetwork.yaml'
+        # - uses: mikefarah/yq@master
+        #   with:
+        #     cmd: yq -i '.metadata.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/gkehubmembership.yaml'
+        # - uses: mikefarah/yq@master
+        #   with:
+        #     cmd: yq -i '.metadata.annotations."config.kubernetes.io/depends-on" = "container.cnrm.cloud.google.com/namespaces/config-control/ContainerCluster/${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/gkehubmembership.yaml'
+        # - uses: mikefarah/yq@master
+        #   with:
+        #     cmd: yq -i '.spec.authority.issuer = "https://container.googleapis.com/v1/projects/jetstack-paul/locations/${{ inputs.location }}/clusters/${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/gkehubmembership.yaml'
+        # - uses: mikefarah/yq@master
+        #   with:
+        #     cmd: yq -i '.spec.endpoint.gkeCluster.resourceRef.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/gkehubmembership.yaml'
+
+        # - uses: mikefarah/yq@master
+        #   with:
+        #     cmd: yq -i '.metadata.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/gkehubfeaturemembership.yaml'
+        # - uses: mikefarah/yq@master
+        #   with:
+        #     cmd: yq -i '.metadata.annotations."config.kubernetes.io/depends-on" = "gkehub.cnrm.cloud.google.com/namespaces/config-control/GKEHubMembership/${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/gkehubfeaturemembership.yaml'
+        # - uses: mikefarah/yq@master
+        #   with:
+        #     cmd: yq -i '.spec.membershipRef.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/gkehubfeaturemembership.yaml'
+
+        - uses: azure/setup-helm@v4.2.0
+          with:
+            version: '<version>' # default is latest (stable)
+          id: install
+
         - run: |
             mkdir user-clusters/${{ inputs.name }}
-            cp bases/gke-autopilot/* user-clusters/${{ inputs.name }}/
-        - uses: mikefarah/yq@master
-          with:
-            cmd: yq -i '.metadata.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/containercluster.yaml'
-        - uses: mikefarah/yq@master
-          with:
-            cmd: yq -i '.spec.location = "${{ inputs.location }}"' 'user-clusters/${{ inputs.name }}/containercluster.yaml'
-        - uses: mikefarah/yq@master
-          with:
-            cmd: yq -i '.spec.networkRef.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/containercluster.yaml'
-        - uses: mikefarah/yq@master
-          with:
-            cmd: yq -i '.spec.subnetworkRef.external = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/containercluster.yaml'
-        - uses: mikefarah/yq@master
-          with:
-            cmd: yq -i '.metadata.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/computenetwork.yaml'
-        - uses: mikefarah/yq@master
-          with:
-            cmd: yq -i '.metadata.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/gkehubmembership.yaml'
-        - uses: mikefarah/yq@master
-          with:
-            cmd: yq -i '.metadata.annotations."config.kubernetes.io/depends-on" = "container.cnrm.cloud.google.com/namespaces/config-control/ContainerCluster/${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/gkehubmembership.yaml'
-        - uses: mikefarah/yq@master
-          with:
-            cmd: yq -i '.spec.authority.issuer = "https://container.googleapis.com/v1/projects/jetstack-paul/locations/${{ inputs.location }}/clusters/${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/gkehubmembership.yaml'
-        - uses: mikefarah/yq@master
-          with:
-            cmd: yq -i '.spec.endpoint.gkeCluster.resourceRef.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/gkehubmembership.yaml'
-
-        - uses: mikefarah/yq@master
-          with:
-            cmd: yq -i '.metadata.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/gkehubfeaturemembership.yaml'
-        - uses: mikefarah/yq@master
-          with:
-            cmd: yq -i '.metadata.annotations."config.kubernetes.io/depends-on" = "gkehub.cnrm.cloud.google.com/namespaces/config-control/GKEHubMembership/${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/gkehubfeaturemembership.yaml'
-        - uses: mikefarah/yq@master
-          with:
-            cmd: yq -i '.spec.membershipRef.name = "${{ inputs.name }}"' 'user-clusters/${{ inputs.name }}/gkehubfeaturemembership.yaml'
+            helm template ${{ inputs.name }} charts/gke-autopilot --set tenantName=${{ inputs.name }} --set region=${{ inputs.location }} > user-clusters/${{ inputs.name }}
 
         - name: Create Pull Request
           uses: peter-evans/create-pull-request@v6

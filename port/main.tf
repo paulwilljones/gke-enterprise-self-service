@@ -1,6 +1,6 @@
 resource "port_action" "create_config_controller" {
-  title       = "Create Config Controller TF"
-  identifier  = "create_config_controller_tf"
+  title       = "Create Config Controller"
+  identifier  = "create_config_controller"
   description = "Create a GKE Config Controller instance"
   icon        = "GKE"
   self_service_trigger = {
@@ -67,7 +67,7 @@ resource "port_action" "create_config_controller" {
 
 resource "port_action" "create_gke" {
   title       = "Create GKE cluster"
-  identifier  = "create_gke_cluster_tf"
+  identifier  = "create_gke_cluster"
   description = "Create a GKE cluster"
   icon        = "GKE"
   self_service_trigger = {

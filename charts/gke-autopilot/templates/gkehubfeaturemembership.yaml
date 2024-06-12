@@ -1,0 +1,35 @@
+apiVersion: gkehub.cnrm.cloud.google.com/v1beta1
+kind: GKEHubFeatureMembership
+metadata:
+  name: {{ .Values.tenantName }}
+  namespace: config-control
+  annotations:
+    config.kubernetes.io/depends-on: "gkehub.cnrm.cloud.google.com/namespaces/config-control/GKEHubMembership/{{ .Values.tenantName }}"
+spec:
+  projectRef:
+    external: jetstack-paul
+  location: global
+  membershipRef:
+    name: {{ .Values.tenantName }}
+  featureRef:
+    name: gkehubfeature-acm
+  configmanagement:
+    configSync:
+      sourceFormat: unstructured
+      git:
+        syncRepo: {{ .Values.syncRepo }}
+        syncBranch: {{ .Values.syncBranch }}
+        policyDir: {{ .Values.policyDir }}
+        syncWaitSecs: "20"
+        syncRev: "HEAD"
+        secretType: {{ .Values.secretType }}
+    policyController:
+      enabled: true
+      exemptableNamespaces:
+        - "kube-system"
+      referentialRulesEnabled: true
+      logDeniesEnabled: true
+      templateLibraryInstalled: true
+      auditIntervalSeconds: "20"
+    hierarchyController:
+      enabled: false
