@@ -1,0 +1,12 @@
+apiVersion: configsync.gke.io/v1beta1
+kind: RootSync
+metadata:
+  name: cis-k8s-v1-7-1
+  namespace: config-management-system
+spec:
+  sourceFormat: unstructured
+  git:
+    repo: https://github.com/GoogleCloudPlatform/gke-policy-library
+    branch: main
+    dir: "anthos-bundles/cis-k8s-v1.7.1"
+    auth: none

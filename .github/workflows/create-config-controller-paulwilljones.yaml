@@ -63,7 +63,20 @@ jobs:
       - name: Configure Config Sync
         run: |
           kubectl wait --for condition=established --timeout=10s crd/rootsyncs.configsync.gke.io
-          kubectl apply -f bases/root-syncs/gkehubfeature.yaml
+          kubectl apply -f - <<EOF
+            apiVersion: gkehub.cnrm.cloud.google.com/v1beta1
+            kind: GKEHubFeature
+            metadata:
+              name: gkehubfeature-acm
+              namespace: config-control
+            spec:
+              projectRef:
+                external: jetstack-paul
+              location: global
+              # The resourceID must be "configmanagement" if you want to use Anthos config
+              # management feature.
+              resourceID: configmanagement
+          EOF
           kubectl apply -f - <<EOF
             apiVersion: configsync.gke.io/v1beta1
             kind: RootSync

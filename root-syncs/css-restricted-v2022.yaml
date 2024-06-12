@@ -1,0 +1,12 @@
+apiVersion: configsync.gke.io/v1beta1
+kind: RootSync
+metadata:
+  name: pss-restricted-v2022
+  namespace: config-management-system
+spec:
+  sourceFormat: unstructured
+  git:
+    repo: https://github.com/GoogleCloudPlatform/gke-policy-library
+    branch: main
+    dir: "anthos-bundles/pss-restricted-v2022"
+    auth: none
