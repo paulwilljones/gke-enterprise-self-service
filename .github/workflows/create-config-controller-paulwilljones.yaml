@@ -1,4 +1,4 @@
-name: 'GKE Config Controller Test'
+name: 'GKE Config Controller'
 on:
   workflow_dispatch:
     inputs:
@@ -76,8 +76,7 @@ jobs:
               # The resourceID must be "configmanagement" if you want to use Anthos config
               # management feature.
               resourceID: configmanagement
-          EOF
-          kubectl apply -f - <<EOF
+            ---
             apiVersion: configsync.gke.io/v1beta1
             kind: RootSync
             metadata:

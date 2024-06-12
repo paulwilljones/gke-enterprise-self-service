@@ -1,4 +1,4 @@
-name: 'GKE Config Controller'
+name: 'GKE Config Controller JS'
 on:
   workflow_dispatch:
     inputs:

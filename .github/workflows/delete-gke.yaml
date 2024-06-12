@@ -14,12 +14,12 @@ on:
           Who triggered the action and general context (blueprint, run id, etc...)
         type: string
 jobs:
-  Add-ContainerCluster:
+  Delete-ContainerCluster:
     runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@v4
         - run: |
-            rm -rf user-clusters/${{ inputs.name }}
+            rm -rf user-clusters/${{ inputs.name }}/${{ inputs.location }}
         - name: Create Pull Request
           uses: peter-evans/create-pull-request@v6
           with:
@@ -27,4 +27,4 @@ jobs:
             title: Delete ${{ inputs.name }} GKE cluster
             branch: rm-gke-${{ inputs.name }}
             delete-branch: true
-            add-paths: user-clusters/${{ inputs.name }}
+            add-paths: user-clusters/${{ inputs.name }}/${{ inputs.location }}

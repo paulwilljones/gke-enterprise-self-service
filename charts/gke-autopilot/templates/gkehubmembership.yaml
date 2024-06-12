@@ -13,4 +13,4 @@ spec:
   endpoint:
     gkeCluster:
       resourceRef:
-        name: {{ .Values.tenantName}}
+        name: {{ .Values.tenantName }}

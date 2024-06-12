@@ -85,7 +85,7 @@ resource "port_action" "create_gke" {
         location = {
           title       = "Location"
           required    = true
-          description = "Location of Config Controller"
+          description = "Location of GKE cluster"
           default     = "europe-west1"
           enum        = ["europe-west1", "us-central1"]
         }
@@ -103,6 +103,48 @@ resource "port_action" "create_gke" {
     org      = "paulwilljones"
     repo     = "gke-enterprise-self-service"
     workflow = "create-gke.yaml"
+    workflow_inputs = jsonencode({
+      "{{ spreadValue() }}" : "{{ .inputs }}",
+      "port_context" : {
+        "runId" : "{{ .run.id }}",
+      }
+    })
+    report_workflow_status = true
+  }
+  required_approval = false
+}
+
+resource "port_action" "delete_gke" {
+  title       = "Delete GKE cluster"
+  identifier  = "delete_gke_cluster"
+  description = "Delete a GKE cluster"
+  icon        = "GKE"
+  self_service_trigger = {
+    operation        = "DELETE"
+    order_properties = ["name", "location"]
+    user_properties = {
+      string_props = {
+        name = {
+          title       = "Name"
+          required    = true
+          description = "Name of GKE cluster"
+          min_length  = 8
+          max_length  = 63
+        }
+        location = {
+          title       = "Location"
+          required    = true
+          description = "Location of GKE cluster"
+          default     = "europe-west1"
+          enum        = ["europe-west1", "us-central1"]
+        }
+      }
+    }
+  }
+  github_method = {
+    org      = "paulwilljones"
+    repo     = "gke-enterprise-self-service"
+    workflow = "delete-gke.yaml"
     workflow_inputs = jsonencode({
       "{{ spreadValue() }}" : "{{ .inputs }}",
       "port_context" : {
