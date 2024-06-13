@@ -1,3 +1,4 @@
+---
 apiVersion: configsync.gke.io/v1beta1
 kind: RootSync
 metadata:
@@ -8,5 +9,5 @@ spec:
   git:
     repo: https://github.com/GoogleCloudPlatform/gke-policy-library
     branch: main
-    dir: "anthos-bundles/nsa-cisa-k8s-v1.2"
+    dir: anthos-bundles/nsa-cisa-k8s-v1.2
     auth: none

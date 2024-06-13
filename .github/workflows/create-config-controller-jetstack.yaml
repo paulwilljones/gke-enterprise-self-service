@@ -1,4 +1,5 @@
-name: 'GKE Config Controller JS'
+---
+name: GKE Config Controller JS
 on:
   workflow_dispatch:
     inputs:
@@ -13,25 +14,24 @@ on:
         description: Type of GKE Config Controller instance (Autopilot|Standard)
       port_context:
         required: false
-        description:
-          Who triggered the action and general context (blueprint, run id, etc...)
+        description: Who triggered the action and general context (blueprint, run id, etc...)
         type: string
 jobs:
   Config-Controller:
     runs-on: ubuntu-latest
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: read
+      id-token: write
     steps:
-      - uses: 'actions/checkout@v4'
-      - uses: 'google-github-actions/auth@v2'
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
         with:
-          project_id: 'jetstack-paul'
-          workload_identity_provider: 'projects/993897508389/locations/global/workloadIdentityPools/github/providers/my-repo'
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
-      - name: 'Use gcloud CLI'
-        run: 'gcloud info'
+          project_id: jetstack-paul
+          workload_identity_provider: projects/993897508389/locations/global/workloadIdentityPools/github/providers/my-repo
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+      - name: Use gcloud CLI
+        run: gcloud info
       - run: |
           echo "${{ inputs.name }}"
           echo "${{ inputs.location }}"

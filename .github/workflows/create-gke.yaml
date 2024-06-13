@@ -1,4 +1,5 @@
-name: 'Add ContainerCluster manifest'
+---
+name: Add ContainerCluster manifest
 on:
   workflow_dispatch:
     inputs:
@@ -13,27 +14,28 @@ on:
         description: Type of GKE cluster (Autopilot|Standard)
       port_context:
         required: false
-        description:
-          Who triggered the action and general context (blueprint, run id, etc...)
+        description: Who triggered the action and general context (blueprint, run id, etc...)
         type: string
 jobs:
   Add-ContainerCluster:
     runs-on: ubuntu-latest
     steps:
-        - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-        - uses: azure/setup-helm@v4.2.0
-          id: install
+      - uses: azure/setup-helm@v4.2.0
+        id: install
 
-        - run: |
-            mkdir -p user-clusters/${{ inputs.name }}/${{ inputs.location }}
-            helm template ${{ inputs.name }} charts/gke-autopilot --set tenantName=${{ inputs.name }} --set region=${{ inputs.location }} > user-clusters/${{ inputs.name }}/${{ inputs.location }}/gke.yaml
+      - run: |
+          mkdir -p user-clusters/${{ inputs.name }}/${{ inputs.location }}
+          helm template ${{ inputs.name }} charts/gke-autopilot \
+            --set tenantName=${{ inputs.name }} \
+            --set region=${{ inputs.location }} > user-clusters/${{ inputs.name }}/${{ inputs.location }}/gke.yaml
 
-        - name: Create Pull Request
-          uses: peter-evans/create-pull-request@v6
-          with:
-            commit-message: add ${{ inputs.name }} GKE cluster in ${{ inputs.location }}
-            title: Add ${{ inputs.name }} GKE cluster
-            branch: add-gke-${{ inputs.name }}
-            delete-branch: true
-            add-paths: user-clusters/${{ inputs.name }}/${{ inputs.location }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: add ${{ inputs.name }} GKE cluster in ${{ inputs.location }}
+          title: Add ${{ inputs.name }} GKE cluster
+          branch: add-gke-${{ inputs.name }}
+          delete-branch: true
+          add-paths: user-clusters/${{ inputs.name }}/${{ inputs.location }}

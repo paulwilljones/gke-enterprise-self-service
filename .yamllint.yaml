@@ -1,0 +1,27 @@
+---
+extends: default
+locale: en_GB.UTF-8
+
+ignore: |-
+  charts/
+  **/crds.yaml
+  terraform/.terraform/
+
+rules:
+  line-length:
+    max: 150
+
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 3
+
+  comments: disable
+
+  # These come up as a false positive for Github workflows
+  document-start:
+    ignore: |-
+      .github/workflows/
+
+  truthy:
+    ignore: |-
+      .github/workflows

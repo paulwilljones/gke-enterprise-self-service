@@ -33,7 +33,7 @@ metadata:
   name: my-cluster
   namespace: config-control
   annotations:
-    config.kubernetes.io/depends-on: "gkehub.cnrm.cloud.google.com/namespaces/config-control/GKEHubMembership/my-cluster"
+    config.kubernetes.io/depends-on: gkehub.cnrm.cloud.google.com/namespaces/config-control/GKEHubMembership/my-cluster
 spec:
   projectRef:
     external: jetstack-paul
@@ -49,17 +49,17 @@ spec:
         syncRepo: https://github.com/paulwilljones/gke-enterprise-self-service
         syncBranch: main
         policyDir: root-syncs
-        syncWaitSecs: "20"
-        syncRev: "HEAD"
+        syncWaitSecs: '20'
+        syncRev: HEAD
         secretType: none
     policyController:
       enabled: true
       exemptableNamespaces:
-        - "kube-system"
+        - kube-system
       referentialRulesEnabled: true
       logDeniesEnabled: true
       templateLibraryInstalled: true
-      auditIntervalSeconds: "20"
+      auditIntervalSeconds: '20'
     hierarchyController:
       enabled: false
 ---
@@ -69,13 +69,13 @@ kind: GKEHubMembership
 metadata:
   annotations:
     cnrm.cloud.google.com/project-id: jetstack-paul
-    config.kubernetes.io/depends-on: "container.cnrm.cloud.google.com/namespaces/config-control/ContainerCluster/my-cluster"
+    config.kubernetes.io/depends-on: container.cnrm.cloud.google.com/namespaces/config-control/ContainerCluster/my-cluster
   name: my-cluster
   namespace: config-control
 spec:
   location: global
   authority:
-    issuer: "https://container.googleapis.com/v1/projects/jetstack-paul/locations/europe-west1/clusters/my-cluster"
+    issuer: https://container.googleapis.com/v1/projects/jetstack-paul/locations/europe-west1/clusters/my-cluster
   endpoint:
     gkeCluster:
       resourceRef:
