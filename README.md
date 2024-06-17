@@ -100,7 +100,7 @@ jobs:
 ...
 ```
 
-> Note: at the time of writing, Config Controller instanaces can be deployed using `gcloud` or Config Connector resources ([`ConfigControllerInstance`](https://cloud.google.com/config-connector/docs/reference/resource-docs/configcontroller/configcontrollerinstance)).
+> Note: at the time of writing, Config Controller instances can be deployed using `gcloud` or Config Connector resources ([`ConfigControllerInstance`](https://cloud.google.com/config-connector/docs/reference/resource-docs/configcontroller/configcontrollerinstance)).
 
 > Note: Config Controller instances can be hosted on GKE Standard and Autopilot clusters. For Autopilot, the `--full-management` flag is passed to `gcloud anthos config controller create`.
 

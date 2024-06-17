@@ -82,7 +82,7 @@ jobs:
               # The resourceID must be "configmanagement" if you want to use Anthos config
               # management feature.
               resourceID: configmanagement
-            ---
+          ---
             apiVersion: configsync.gke.io/v1beta1
             kind: RootSync
             metadata:
